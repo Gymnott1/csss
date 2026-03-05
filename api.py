@@ -7,9 +7,15 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from database import SessionLocal, CustomVulnerability
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="CSSS Scaling API")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 SCAN_DIR = "scans"
 if not os.path.exists(SCAN_DIR):
     os.makedirs(SCAN_DIR)
