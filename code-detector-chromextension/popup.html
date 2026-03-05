@@ -1,374 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code Detector</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      width: 280px;
-      background: #0a0e0a;
-      color: #e2ffe2;
-      font-family: 'Space Grotesk', sans-serif;
-      overflow: hidden;
-    }
-
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
-      background-size: 20px 20px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      padding: 18px 18px 16px;
-    }
-
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #0f2e18, #1a4a28);
-      border: 1px solid rgba(74, 222, 128, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 16px rgba(74, 222, 128, 0.2);
-    }
-
-    .logo::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), transparent);
-      z-index: -1;
-    }
-
-    .logo-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 20px rgba(74, 222, 128, 0.4);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.85; }
-    }
-
-    .header-text h1 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #f0fff0;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-    }
-
-    .header-text p {
-      font-size: 10.5px;
-      color: rgba(74, 222, 128, 0.6);
-      font-family: 'Fira Code', monospace;
-      font-weight: 400;
-      margin-top: 1px;
-    }
-
-    /* Status Card */
-    .status-card {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(74, 222, 128, 0.02));
-      border: 1px solid rgba(74, 222, 128, 0.18);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .status-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.5), transparent);
-    }
-
-    .stat-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: rgba(74, 222, 128, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 500;
-    }
-
-    .stat-value {
-      font-family: 'Fira Code', monospace;
-      font-size: 26px;
-      font-weight: 500;
-      color: #4ade80;
-      text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
-      line-height: 1;
-      transition: all 0.3s ease;
-    }
-
-    .stat-unit {
-      font-size: 11px;
-      color: rgba(74, 222, 128, 0.5);
-      margin-left: 4px;
-    }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 8px;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .status-text {
-      font-size: 11px;
-      color: rgba(74, 222, 128, 0.6);
-      font-family: 'Fira Code', monospace;
-    }
-
-    /* Controls */
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 9px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(74, 222, 128, 0.25);
-      background: rgba(74, 222, 128, 0.06);
-      color: #86efac;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .btn:hover {
-      background: rgba(74, 222, 128, 0.14);
-      border-color: rgba(74, 222, 128, 0.5);
-      color: #bbf7d0;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(74, 222, 128, 0.12);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.18), rgba(74, 222, 128, 0.08));
-      border-color: rgba(74, 222, 128, 0.4);
-      color: #4ade80;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.28), rgba(74, 222, 128, 0.14));
-      border-color: rgba(74, 222, 128, 0.65);
-    }
-
-    .btn-icon {
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    /* Toggle Row */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(74, 222, 128, 0.15);
-      background: rgba(74, 222, 128, 0.03);
-    }
-
-    .toggle-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: #86efac;
-    }
-
-    .toggle {
-      position: relative;
-      width: 34px;
-      height: 18px;
-    }
-
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: rgba(74, 222, 128, 0.1);
-      border: 1px solid rgba(74, 222, 128, 0.3);
-      border-radius: 9px;
-      transition: all 0.2s ease;
-    }
-
-    .toggle-slider:before {
-      content: '';
-      position: absolute;
-      height: 12px;
-      width: 12px;
-      left: 2px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(74, 222, 128, 0.5);
-      border-radius: 50%;
-      transition: all 0.2s ease;
-    }
-
-    .toggle input:checked + .toggle-slider {
-      background: rgba(74, 222, 128, 0.2);
-      border-color: rgba(74, 222, 128, 0.6);
-      box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
-    }
-
-    .toggle input:checked + .toggle-slider:before {
-      transform: translate(16px, -50%);
-      background: #4ade80;
-      box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
-    }
-
-    /* Footer */
-    .footer {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(74, 222, 128, 0.08);
-      text-align: center;
-    }
-
-    .footer-text {
-      font-size: 9.5px;
-      color: rgba(74, 222, 128, 0.25);
-      font-family: 'Fira Code', monospace;
-      letter-spacing: 0.03em;
-    }
-
-    .loading-dots::after {
-      content: '';
-      animation: loadingDots 1.2s infinite;
-    }
-
-    @keyframes loadingDots {
-      0% { content: ''; }
-      33% { content: '.'; }
-      66% { content: '..'; }
-      100% { content: '...'; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Detector</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 280px;
+            background: #0a0e0a;
+            color: #e2ffe2;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+        }
+        
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 18px 18px 16px;
+        }
+        /* Header */
+        
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        
+        .logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f2e18, #1a4a28);
+            border: 1px solid rgba(74, 222, 128, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 16px rgba(74, 222, 128, 0.2);
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), transparent);
+            z-index: -1;
+        }
+        
+        .logo-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 20px rgba(74, 222, 128, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.85;
+            }
+        }
+        
+        .header-text h1 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f0fff0;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+        }
+        
+        .header-text p {
+            font-size: 10.5px;
+            color: rgba(74, 222, 128, 0.6);
+            font-family: 'Fira Code', monospace;
+            font-weight: 400;
+            margin-top: 1px;
+        }
+        /* Status Card */
+        
+        .status-card {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(74, 222, 128, 0.02));
+            border: 1px solid rgba(74, 222, 128, 0.18);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.5), transparent);
+        }
+        
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: rgba(74, 222, 128, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 26px;
+            font-weight: 500;
+            color: #4ade80;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-unit {
+            font-size: 11px;
+            color: rgba(74, 222, 128, 0.5);
+            margin-left: 4px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-text {
+            font-size: 11px;
+            color: rgba(74, 222, 128, 0.6);
+            font-family: 'Fira Code', monospace;
+        }
+        /* Controls */
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 9px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            background: rgba(74, 222, 128, 0.06);
+            color: #86efac;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+        
+        .btn:hover {
+            background: rgba(74, 222, 128, 0.14);
+            border-color: rgba(74, 222, 128, 0.5);
+            color: #bbf7d0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.12);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.18), rgba(74, 222, 128, 0.08));
+            border-color: rgba(74, 222, 128, 0.4);
+            color: #4ade80;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.28), rgba(74, 222, 128, 0.14));
+            border-color: rgba(74, 222, 128, 0.65);
+        }
+        
+        .btn-icon {
+            font-size: 13px;
+            line-height: 1;
+        }
+        /* Toggle Row */
+        
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+            background: rgba(74, 222, 128, 0.03);
+        }
+        
+        .toggle-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #86efac;
+        }
+        
+        .toggle {
+            position: relative;
+            width: 34px;
+            height: 18px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 9px;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-slider:before {
+            content: '';
+            position: absolute;
+            height: 12px;
+            width: 12px;
+            left: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(74, 222, 128, 0.5);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle input:checked+.toggle-slider {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: rgba(74, 222, 128, 0.6);
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+        }
+        
+        .toggle input:checked+.toggle-slider:before {
+            transform: translate(16px, -50%);
+            background: #4ade80;
+            box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
+        }
+        /* Footer */
+        
+        .footer {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(74, 222, 128, 0.08);
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 9.5px;
+            color: rgba(74, 222, 128, 0.25);
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.03em;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: loadingDots 1.2s infinite;
+        }
+        
+        @keyframes loadingDots {
+            0% {
+                content: '';
+            }
+            33% {
+                content: '.';
+            }
+            66% {
+                content: '..';
+            }
+            100% {
+                content: '...';
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="bg-grid"></div>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo">
-        <div class="logo-dot"></div>
-      </div>
-      <div class="header-text">
-        <h1>Code Detector</h1>
-        <p>v3.0.0 · active</p>
-      </div>
-    </div>
-
-    <!-- Status Card -->
-    <div class="status-card">
-      <div class="stat-row">
-        <div>
-          <div class="stat-label">Detected on page</div>
-          <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
-            <div class="stat-value" id="codeCount"><span class="loading-dots"></span></div>
-            <span class="stat-unit" id="codeUnit" style="display:none">blocks</span>
-          </div>
+    <div class="bg-grid"></div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-dot"></div>
+            </div>
+            <div class="header-text">
+                <h1>Code Detector</h1>
+                <p>v3.0.0 · active</p>
+            </div>
         </div>
-      </div>
-      <div class="status-indicator">
-        <div class="status-dot"></div>
-        <span class="status-text" id="statusText">scanning page</span>
-      </div>
-    </div>
 
-    <!-- Controls -->
-    <div class="controls">
-      <button class="btn btn-primary" id="rescanBtn">
+        <!-- Status Card -->
+        <div class="status-card">
+            <div class="stat-row">
+                <div>
+                    <div class="stat-label">Detected on page</div>
+                    <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+                        <div class="stat-value" id="codeCount"><span class="loading-dots"></span></div>
+                        <span class="stat-unit" id="codeUnit" style="display:none">blocks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span class="status-text" id="statusText">scanning page</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" id="rescanBtn">
         <span class="btn-icon">⟳</span>
         Re-scan Page
       </button>
 
-      <div class="toggle-row">
-        <span class="toggle-label">Show badges</span>
-        <label class="toggle">
+            <div class="toggle-row">
+                <span class="toggle-label">Show badges</span>
+                <label class="toggle">
           <input type="checkbox" id="visibilityToggle" checked>
           <span class="toggle-slider"></span>
         </label>
-      </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">detects 20+ languages · CSSS</div>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-text">detects 15+ languages · auto-refresh on SPA nav</div>
-    </div>
-  </div>
-
-  <script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
+
 </html>
