@@ -1,42 +1,34 @@
 import subprocess
 import json
 import os
-import tempfile
+import uuid
 import re
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from database import SessionLocal, CustomVulnerability
+import uvicorn
 
-app = FastAPI(title="CSSS Advanced Analysis API")
+app = FastAPI(title="CSSS Scaling API")
 
-# --- SCHEMAS ---
-class Finding(BaseModel):
-    title: str
-    severity: str
-    line: int = 0
-    description: str
-    remediation: str
-    tool: str 
+SCAN_DIR = "scans"
+if not os.path.exists(SCAN_DIR):
+    os.makedirs(SCAN_DIR)
 
-class ScanResponse(BaseModel):
-    status: str
-    language: str
-    total_findings: int
-    findings: list[Finding]
-    ai_analysis: dict
-
-# --- SEMGREP ENGINE ---
 def run_semgrep_scan(code_content, language):
-    ext_map = {"python": ".py", "javascript": ".js", "java": ".java", "go": ".go"}
+   
+    unique_id = str(uuid.uuid4())
+    ext_map = {"python": ".py", "javascript": ".js", "java": ".java", "c++": ".cpp"}
     extension = ext_map.get(language.lower(), ".txt")
+    
+    temp_path = os.path.join(SCAN_DIR, f"scan_{unique_id}{extension}")
 
-    with tempfile.NamedTemporaryFile(suffix=extension, delete=False, mode='w') as temp:
-        temp.write(code_content)
-        temp_path = temp.name
+    with open(temp_path, "w") as f:
+        f.write(code_content)
+    
+    print(f" Created unique file for scanning: {temp_path}")
 
     try:
-        # Note: --config=auto needs internet the first time to fetch rules
-        # If no internet, use --config=p/security
+       
         cmd = ["semgrep", "--config=auto", "--json", temp_path]
         result = subprocess.run(cmd, capture_output=True, text=True)
         
@@ -45,59 +37,46 @@ def run_semgrep_scan(code_content, language):
         
         findings = []
         for issue in raw_data.get("results", []):
-            findings.append(Finding(
-                title=issue["check_id"].split(".")[-1].replace("-", " ").title(),
-                severity=issue["extra"]["severity"],
-                line=issue["start"]["line"],
-                description=issue["extra"]["message"],
-                remediation="Review and sanitize this code block.",
-                tool="Semgrep"
-            ))
+            findings.append({
+                "title": issue["check_id"].split(".")[-1].title(),
+                "severity": issue["extra"]["severity"],
+                "line": issue["start"]["line"],
+                "description": issue["extra"]["message"],
+                "tool": "Semgrep"
+            })
         return findings
-    except Exception as e:
-        print(f"Semgrep Error: {e}")
-        return []
-    finally:
-        if os.path.exists(temp_path): os.remove(temp_path)
 
-# --- ENDPOINT ---
-@app.post("/api/scan", response_model=ScanResponse)
-async def scan_snippet(request: dict):
+    finally:
+        
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+            print(f"🗑️ Deleted {temp_path} after scan.")
+
+@app.post("/api/scan")
+def scan_snippet(request: dict):
     code = request.get("code", "")
     language = request.get("language", "python")
-    
-    all_findings = []
-    
-    # 1. Semgrep Scan
-    semgrep_findings = run_semgrep_scan(code, language)
-    all_findings.extend(semgrep_findings)
 
-    # 2. Custom DB Scan
+    all_findings = run_semgrep_scan(code, language)
+
     db = SessionLocal()
     rules = db.query(CustomVulnerability).all()
     for rule in rules:
         if re.search(rule.pattern, code, re.IGNORECASE):
-            all_findings.append(Finding(
-                title=rule.title,
-                severity=rule.severity,
-                line=1,
-                description=rule.description,
-                remediation=rule.remediation,
-                tool="CustomDB"
-            ))
+            all_findings.append({
+                "title": rule.title,
+                "severity": rule.severity,
+                "line": 1,
+                "description": rule.description,
+                "tool": "CustomDB"
+            })
     db.close()
 
     return {
         "status": "success",
-        "language": language,
-        "total_findings": len(all_findings),
-        "findings": all_findings,
-        "ai_analysis": {"review": "Demo AI Scan Complete", "secure_version": "// AI Refactoring coming next"}
+        "total": len(all_findings),
+        "findings": all_findings
     }
 
-# --- THIS PART IS CRITICAL TO START THE SERVER ---
 if __name__ == "__main__":
-    import uvicorn
-    # This prints in your terminal so you know it started
-    print("🚀 CSSS Analysis Engine starting on http://localhost:8000")
     uvicorn.run(app, host="0.0.0.0", port=8000)
