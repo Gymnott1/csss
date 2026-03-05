@@ -334,19 +334,21 @@
 
 <body>
     <div class="bg-grid"></div>
-    <div class="container">
+    <div class="container" id="mainView">
         <!-- Header -->
         <div class="header">
             <div class="logo">
                 <div class="logo-dot"></div>
             </div>
             <div class="header-text">
-                <h1>Code Detector</h1>
-                <p>v3.0.0 · active</p>
+                <h1>CSSS Detector</h1>
+                <p id="userStatus">v3.0.0 · active</p>
             </div>
+            <!-- New Login Trigger -->
+            <button class="auth-trigger" id="openAuthBtn">👤</button>
         </div>
 
-        <!-- Status Card -->
+        <!-- Status Card (Existing) -->
         <div class="status-card">
             <div class="stat-row">
                 <div>
@@ -359,31 +361,101 @@
             </div>
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span class="status-text" id="statusText">scanning page</span>
+                <span class="status-text" id="statusText">scanning...</span>
             </div>
         </div>
 
-        <!-- Controls -->
+        <!-- Controls (Existing) -->
         <div class="controls">
-            <button class="btn btn-primary" id="rescanBtn">
-        <span class="btn-icon">⟳</span>
-        Re-scan Page
-      </button>
-
+            <button class="btn btn-primary" id="rescanBtn"><span class="btn-icon">⟳</span> Re-scan Page</button>
             <div class="toggle-row">
                 <span class="toggle-label">Show badges</span>
                 <label class="toggle">
-          <input type="checkbox" id="visibilityToggle" checked>
-          <span class="toggle-slider"></span>
-        </label>
+                    <input type="checkbox" id="visibilityToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
         </div>
-
-        <!-- Footer -->
         <div class="footer">
-            <div class="footer-text">detects 20+ languages · CSSS</div>
+            <div class="footer-text">CSSS · Professional Edition</div>
         </div>
     </div>
+
+    <!-- NEW: AUTH VIEW -->
+    <div class="container" id="authView" style="display: none;">
+        <div class="header">
+            <button class="btn-back" id="closeAuthBtn">← Back</button>
+            <h1 id="authTitle" style="font-size: 16px; margin-left: 10px;">Security Login</h1>
+        </div>
+
+        <div class="status-card">
+            <input type="text" id="username" class="auth-input" placeholder="Username">
+            <input type="password" id="password" class="auth-input" placeholder="Password">
+            <input type="password" id="confirmPassword" class="auth-input" placeholder="Confirm Password" style="display: none;">
+
+            <button class="btn btn-primary" id="authSubmit" style="margin-top: 10px;">Login</button>
+            <p id="authMsg" style="font-size: 10px; color: #ff4d4d; margin-top: 8px; text-align: center;"></p>
+        </div>
+
+        <p class="toggle-auth" id="toggleAuthMode">Don't have an account? <span>Register</span></p>
+    </div>
+
+    <!-- Styles for Auth -->
+    <style>
+        .auth-trigger {
+            background: none;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 50%;
+            color: #4ade80;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            margin-left: auto;
+            transition: 0.2s;
+        }
+        
+        .auth-trigger:hover {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+        }
+        
+        .btn-back {
+            background: none;
+            border: none;
+            color: #4ade80;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 6px;
+            color: white;
+            margin-bottom: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+        
+        .auth-input:focus {
+            border-color: #4ade80;
+        }
+        
+        .toggle-auth {
+            font-size: 11px;
+            text-align: center;
+            color: #888;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .toggle-auth span {
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
 
     <script src="popup.js"></script>
 </body>
