@@ -18,7 +18,7 @@
             born: '1995',
             paradigm: 'Multi-paradigm',
             usedFor: 'Web, servers, mobile',
-            tip: 'Powers the interactive web. Runs in every browser natively.',
+            tip: 'Powers the interactive web. Runs in every browser natively.'
         },
         {
             name: 'TypeScript',
@@ -28,7 +28,7 @@
             born: '2012',
             paradigm: 'Typed / OOP',
             usedFor: 'Large-scale web apps',
-            tip: 'JavaScript with static types. Compiles down to plain JS.',
+            tip: 'JavaScript with static types. Compiles down to plain JS.'
         },
         {
             name: 'Python',
@@ -38,7 +38,7 @@
             born: '1991',
             paradigm: 'Multi-paradigm',
             usedFor: 'AI/ML, scripting, data',
-            tip: 'Famous for readability. The #1 language in AI & data science.',
+            tip: 'Famous for readability. The #1 language in AI & data science.'
         },
         {
             name: 'Java',
@@ -48,7 +48,17 @@
             born: '1995',
             paradigm: 'Object-Oriented',
             usedFor: 'Enterprise, Android',
-            tip: '"Write once, run anywhere." Runs on the JVM.',
+            tip: '"Write once, run anywhere." Runs on the JVM.'
+        },
+        {
+            name: 'C#',
+            pattern: /\b(using\s+System|namespace\s+\w+|public\s+class\s+\w+|void\s+Main|Console\.WriteLine|async\s+Task)\b/,
+            icon: '⚡',
+            color: '#178600',
+            born: '2000',
+            paradigm: 'Object-Oriented',
+            usedFor: 'Windows, Games (Unity)',
+            tip: 'Microsoft’s versatile language for enterprise and game dev.'
         },
         {
             name: 'C/C++',
@@ -58,7 +68,7 @@
             born: '1972',
             paradigm: 'Procedural / OOP',
             usedFor: 'Systems, games, OS',
-            tip: 'Close to the metal. Used in OS kernels and performance-critical systems.',
+            tip: 'Close to the metal. Used in kernels and performance-critical apps.'
         },
         {
             name: 'Rust',
@@ -68,7 +78,7 @@
             born: '2010',
             paradigm: 'Systems / Functional',
             usedFor: 'Systems, WebAssembly',
-            tip: 'Memory-safe without a GC. Loved by devs for 8 years running.',
+            tip: 'Memory-safe without a GC. Loved for its performance and safety.'
         },
         {
             name: 'Go',
@@ -76,19 +86,9 @@
             icon: '⚡',
             color: '#00add8',
             born: '2009',
-            paradigm: 'Concurrent / Imperative',
-            usedFor: 'Cloud, CLI tools, APIs',
-            tip: 'Built at Google. Goroutines make concurrency simple.',
-        },
-        {
-            name: 'Ruby',
-            pattern: /(\bdef\s+\w+|\bend\b|\bputs\s+|\brequire\s+['"]|\battr_(reader|writer|accessor)\b|\.each\s*(do|\{)|\bnil\b)/,
-            icon: '⚡',
-            color: '#cc342d',
-            born: '1995',
-            paradigm: 'Object-Oriented',
-            usedFor: 'Web (Rails), scripting',
-            tip: 'Designed for developer happiness. Everything is an object.',
+            paradigm: 'Concurrent',
+            usedFor: 'Cloud, Infrastructure',
+            tip: 'Built at Google. Goroutines make concurrency remarkably simple.'
         },
         {
             name: 'PHP',
@@ -97,8 +97,18 @@
             color: '#8892be',
             born: '1994',
             paradigm: 'Imperative / OOP',
-            usedFor: 'Web backends (WordPress)',
-            tip: 'Runs ~79% of all websites. Laravel is its popular modern framework.',
+            usedFor: 'Web Backends',
+            tip: 'Runs ~79% of the web. Powers WordPress and Laravel.'
+        },
+        {
+            name: 'Ruby',
+            pattern: /(\bdef\s+\w+|\bend\b|\bputs\s+|\brequire\s+['"]|\battr_(reader|writer|accessor)\b|\.each\s*(do|\{)|\bnil\b)/,
+            icon: '⚡',
+            color: '#cc342d',
+            born: '1995',
+            paradigm: 'Object-Oriented',
+            usedFor: 'Web (Rails)',
+            tip: 'Designed for developer happiness. Everything is an object.'
         },
         {
             name: 'Swift',
@@ -107,68 +117,138 @@
             color: '#f05138',
             born: '2014',
             paradigm: 'Multi-paradigm',
-            usedFor: 'iOS, macOS apps',
-            tip: 'Apple\'s modern language. Replaces Objective-C for Apple platforms.',
+            usedFor: 'iOS, macOS',
+            tip: 'Apple’s modern replacement for Objective-C.'
         },
         {
             name: 'Kotlin',
-            pattern: /\b(fun\s+\w+\s*\(|val\s+\w+\s*=|var\s+\w+\s*=|data\s+class|companion\s+object|when\s*\(|\.let\s*\{|\.apply\s*\{)\b/,
+            pattern: /\b(fun\s+\w+\s*\(|val\s+\w+\s*=|var\s+\w+\s*=|data\s+class|companion\s+object|when\s*\(|\.let\s*\{)\b/,
             icon: '⚡',
             color: '#7f52ff',
             born: '2011',
             paradigm: 'Multi-paradigm',
-            usedFor: 'Android, server-side',
-            tip: 'JetBrains\' answer to Java. 100% interoperable with Java.',
+            usedFor: 'Android, Backend',
+            tip: 'Modern Java alternative. 100% interoperable with Java.'
         },
         {
-            name: 'SQL',
-            pattern: /\b(SELECT\s+[\w\*]+\s+FROM|INSERT\s+INTO\s+\w+|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+(TABLE|DATABASE|INDEX)|ALTER\s+TABLE|DROP\s+TABLE|INNER\s+JOIN|LEFT\s+JOIN)\b/i,
+            name: 'Dart',
+            pattern: /\b(void\s+main\s*\(|final\s+\w+|import\s+['"]package:|class\s+\w+\s+extends|@override)\b/,
             icon: '⚡',
-            color: '#e38c00',
-            born: '1974',
-            paradigm: 'Declarative / Query',
-            usedFor: 'Databases, analytics',
-            tip: 'The language of relational data. Every database speaks SQL.',
+            color: '#0175c2',
+            born: '2011',
+            paradigm: 'OOP',
+            usedFor: 'Flutter (Mobile/Web)',
+            tip: 'Optimized for building beautiful user interfaces.'
+        },
+        {
+            name: 'R',
+            pattern: /\b(library\s*\(|install\.packages|head\s*\(|summary\s*\(|plot\s*\(|<-)\b/,
+            icon: '⚡',
+            color: '#276dc3',
+            born: '1993',
+            paradigm: 'Functional/Statistical',
+            usedFor: 'Data Science',
+            tip: 'The gold standard for statistical computing and graphics.'
+        },
+        {
+            name: 'Scala',
+            pattern: /\b(val\s+\w+|def\s+\w+\s*\(|trait\s+\w+|extends\s+App|println\s*\(|object\s+\w+)\b/,
+            icon: '⚡',
+            color: '#de3423',
+            born: '2004',
+            paradigm: 'Functional / OOP',
+            usedFor: 'Big Data (Spark)',
+            tip: 'Scalable language combining functional and object-oriented.'
+        },
+        {
+            name: 'Haskell',
+            pattern: /\b(module\s+\w+|import\s+\w+|main\s*=|::\s*[\w\s]->|where\s+\w+|let\s+\w+\s*=)\b/,
+            icon: '⚡',
+            color: '#5e5086',
+            born: '1990',
+            paradigm: 'Purely Functional',
+            usedFor: 'FinTech, Research',
+            tip: 'Purely functional with lazy evaluation and strong types.'
+        },
+        {
+            name: 'Lua',
+            pattern: /\b(local\s+\w+|function\s+\w+|then\b|end\b|print\s*\(|io\.write|require\s*\(|table\.insert)\b/,
+            icon: '⚡',
+            color: '#000080',
+            born: '1993',
+            paradigm: 'Scripting',
+            usedFor: 'Game Scripting (Roblox)',
+            tip: 'Lightweight and embeddable scripting language.'
+        },
+        {
+            name: 'Perl',
+            pattern: /\b(my\s+\$\w+|use\s+strict|use\s+warnings|print\s+['"]|sub\s+\w+\s*\{|foreach\b|scalar\b)\b/,
+            icon: '⚡',
+            color: '#39457e',
+            born: '1987',
+            paradigm: 'Scripting',
+            usedFor: 'Legacy, SysAdmin',
+            tip: 'The "Swiss Army knife" of scripting languages.'
         },
         {
             name: 'Shell/Bash',
-            pattern: /^(#!\/bin\/(bash|sh|zsh|fish)|sudo\s+\w+|apt(-get)?\s+(install|update)|npm\s+(install|run|start)|pip\s+install|git\s+(clone|commit|push)|docker\s+\w+)/m,
+            pattern: /^(#!\/bin\/(bash|sh|zsh|fish)|sudo\s+\w+|apt(-get)?\s+|npm\s+|pip\s+install|git\s+|docker\s+)/m,
             icon: '⚡',
             color: '#4eaa25',
             born: '1989',
-            paradigm: 'Scripting / Command',
-            usedFor: 'Automation, DevOps',
-            tip: 'The glue of Unix. Automates everything from deployments to backups.',
+            paradigm: 'Scripting',
+            usedFor: 'DevOps, Automation',
+            tip: 'The glue of Unix. Automates deployments and environments.'
+        },
+        {
+            name: 'PowerShell',
+            pattern: /\b(Write-Host|Get-Process|Invoke-WebRequest|Set-ExecutionPolicy|\$\w+\s*=|param\s*\(|Function\s+\w+)\b/,
+            icon: '⚡',
+            color: '#012456',
+            born: '2006',
+            paradigm: 'Scripting / Task Automation',
+            usedFor: 'Windows Admin',
+            tip: 'Task-based command-line shell and scripting language.'
+        },
+        {
+            name: 'SQL',
+            pattern: /\b(SELECT\s+[\w\*]+\s+FROM|INSERT\s+INTO\s+\w+|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+TABLE|INNER\s+JOIN)\b/i,
+            icon: '⚡',
+            color: '#e38c00',
+            born: '1974',
+            paradigm: 'Declarative',
+            usedFor: 'Databases',
+            tip: 'The universal language for managing relational data.'
         },
         {
             name: 'HTML',
-            pattern: /(<(!DOCTYPE\s+html|html[\s>]|head[\s>]|body[\s>]|div[\s>]|script[\s>]|link\s|meta\s)[^>]*>|<\/\w+>)/i,
+            pattern: /(<(!DOCTYPE\s+html|html|head|body|div|script|link|meta)[^>]*>|<\/\w+>)/i,
             icon: '⚡',
             color: '#e34f26',
             born: '1993',
             paradigm: 'Markup',
-            usedFor: 'Web page structure',
-            tip: 'The skeleton of every webpage. Not a programming language, but essential.',
+            usedFor: 'Web Structure',
+            tip: 'The skeleton of every webpage. Essential for the web.'
         },
         {
             name: 'CSS',
-            pattern: /([.#][\w-]+(\s*,\s*[.#][\w-]+)*\s*\{[\s\S]*?\}|@media\s+|@keyframes\s+\w+|:root\s*\{|--[\w-]+\s*:)/,
+            pattern: /([.#][\w-]+(\s*,\s*[.#][\w-]+)*\s*\{[\s\S]*?\}|@media|@keyframes|:root)/,
             icon: '⚡',
             color: '#264de4',
             born: '1996',
             paradigm: 'Stylesheet',
-            usedFor: 'Web page styling',
-            tip: 'Styles the web. CSS Grid and Flexbox changed layout forever.',
+            usedFor: 'Web Styling',
+            tip: 'Styles the web. CSS Grid and Flexbox changed design forever.'
         },
         {
             name: 'JSON',
             pattern: /^\s*(\{[\s\S]*"[\w\s-]+"[\s\S]*:|\[[\s\S]*\{)\s*[\}\]]/,
             icon: '⚡',
-            color: '#000000',
+            color: '#333333',
             born: '2001',
-            paradigm: 'Data format',
-            usedFor: 'APIs, config, data exchange',
-            tip: 'The universal language of APIs. Lightweight and human-readable.',
+            paradigm: 'Data Format',
+            usedFor: 'APIs, Config',
+            tip: 'Lightweight data exchange format based on JavaScript.'
         },
         {
             name: 'YAML',
@@ -176,9 +256,29 @@
             icon: '⚡',
             color: '#cb171e',
             born: '2001',
-            paradigm: 'Data format',
-            usedFor: 'Config files, CI/CD',
-            tip: 'Human-friendly config format. Powers Docker Compose, GitHub Actions, k8s.',
+            paradigm: 'Data Format',
+            usedFor: 'CI/CD, Kubernetes',
+            tip: 'Human-friendly data serialization used in DevOps.'
+        },
+        {
+            name: 'Markdown',
+            pattern: /^(#\s+.+|>\s+.+|\*\*.+\*\*|\[.+\]\(.+\)|-\s+.+|\d+\.\s+.+)/m,
+            icon: '⚡',
+            color: '#083fa1',
+            born: '2004',
+            paradigm: 'Markup',
+            usedFor: 'Documentation',
+            tip: 'The standard for README files and technical writing.'
+        },
+        {
+            name: 'GraphQL',
+            pattern: /\b(query\s+\w+|mutation\s+\w+|subscription\s+\w+|type\s+\w+\s*\{|schema\s*\{)\b/,
+            icon: '⚡',
+            color: '#e10098',
+            born: '2015',
+            paradigm: 'Query',
+            usedFor: 'APIs',
+            tip: 'A typed query language for APIs. Get exactly what you ask for.'
         },
         {
             name: 'XML',
@@ -186,10 +286,30 @@
             icon: '⚡',
             color: '#ff6600',
             born: '1998',
-            paradigm: 'Markup / Data format',
-            usedFor: 'Data exchange, config',
-            tip: 'Verbose but structured. Still used in enterprise and Android layouts.',
+            paradigm: 'Markup',
+            usedFor: 'Data Exchange',
+            tip: 'Flexible but verbose structured data format.'
         },
+        {
+            name: 'Objective-C',
+            pattern: /\b(@interface|@implementation|@property|#import\s+<Foundation\/Foundation\.h>|\[\w+\s+\w+\])\b/,
+            icon: '⚡',
+            color: '#438eff',
+            born: '1984',
+            paradigm: 'OOP',
+            usedFor: 'Legacy Apple',
+            tip: 'The original language for iPhone and Mac apps.'
+        },
+        {
+            name: 'Julia',
+            pattern: /\b(using\s+\w+|println\s*\(|function\s+\w+|end\b|struct\s+\w+|macro\b)\b/,
+            icon: '⚡',
+            color: '#9558b2',
+            born: '2012',
+            paradigm: 'Multi-paradigm',
+            usedFor: 'Scientific Computing',
+            tip: 'Designed for high-performance numerical analysis.'
+        }
     ];
 
     function detectLanguage(code) {

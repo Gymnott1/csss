@@ -118,18 +118,16 @@ def authenticate_user(request: AuthRequest):
     db = SessionLocal()
     
     try:
-        # --- LOGIC 1: REGISTRATION ---
+        
         if request.login_type == "register":
-            # 1. Validation
+          
             if request.password != request.confirm_password:
                 raise HTTPException(status_code=400, detail="Passwords do not match")
             
-            # 2. Check if user exists
             existing_user = db.query(User).filter_by(username=request.username).first()
             if existing_user:
                 raise HTTPException(status_code=400, detail="Username already exists")
             
-            # 3. Save User (Default role is 'user')
             new_user = User(
                 username=request.username,
                 password_hash=hash_password(request.password),
@@ -140,11 +138,9 @@ def authenticate_user(request: AuthRequest):
             
             return {"status": "success", "message": "User registered successfully", "role": "user"}
 
-        # --- LOGIC 2: LOGIN ---
         elif request.login_type == "login":
             user = db.query(User).filter_by(username=request.username).first()
             
-            # Verify password
             if user and bcrypt.checkpw(request.password.encode('utf-8'), user.password_hash.encode('utf-8')):
                 return {
                     "status": "success", 
