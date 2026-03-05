@@ -1,13 +1,12 @@
-// CSSS Code Detector - Popup Controller
 document.addEventListener('DOMContentLoaded', async() => {
-    // ─── UI ELEMENTS (Main View) ──────────────────────────────────────────
+
     const countEl = document.getElementById('codeCount');
     const unitEl = document.getElementById('codeUnit');
     const statusEl = document.getElementById('statusText');
     const rescanBtn = document.getElementById('rescanBtn');
     const visibilityToggle = document.getElementById('visibilityToggle');
 
-    // ─── UI ELEMENTS (Auth View) ──────────────────────────────────────────
+
     const mainView = document.getElementById('mainView');
     const authView = document.getElementById('authView');
     const openAuthBtn = document.getElementById('openAuthBtn');
@@ -17,20 +16,17 @@ document.addEventListener('DOMContentLoaded', async() => {
     const authTitle = document.getElementById('authTitle');
     const userStatus = document.getElementById('userStatus');
 
-    // ─── UI ELEMENTS (Inputs) ─────────────────────────────────────────────
+
     const usernameInp = document.getElementById('username');
     const passwordInp = document.getElementById('password');
     const confirmInp = document.getElementById('confirmPassword');
     const authMsg = document.getElementById('authMsg');
 
-    let mode = 'login'; // Initial mode
-
-    // ─── 1. SESSION MANAGEMENT ───────────────────────────────────────────
-    // Check if user is logged in via local storage
+    let mode = 'login';
     chrome.storage.local.get(['username'], (res) => {
         if (res.username) {
             userStatus.textContent = `👤 ${res.username}`;
-            openAuthBtn.textContent = '🚪'; // Logout Icon
+            openAuthBtn.textContent = '⏻';
             openAuthBtn.title = 'Logout';
         } else {
             userStatus.textContent = 'v3.0.0 · active';
@@ -39,18 +35,17 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     });
 
-    // ─── 2. AUTH VIEW CONTROLS ──────────────────────────────────────────
     openAuthBtn.addEventListener('click', () => {
         chrome.storage.local.get(['username'], (res) => {
             if (res.username) {
-                // LOGOUT LOGIC: Clear session and reload
+
                 if (confirm(`Logout from ${res.username}?`)) {
                     chrome.storage.local.remove(['username'], () => {
                         location.reload();
                     });
                 }
             } else {
-                // OPEN LOGIN VIEW
+
                 mainView.style.display = 'none';
                 authView.style.display = 'block';
             }
@@ -60,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     closeAuthBtn.addEventListener('click', () => {
         authView.style.display = 'none';
         mainView.style.display = 'block';
-        authMsg.textContent = ""; // Clear errors
+        authMsg.textContent = "";
     });
 
     toggleAuthMode.addEventListener('click', () => {
@@ -74,7 +69,6 @@ document.addEventListener('DOMContentLoaded', async() => {
             "Already have an account? <span>Login</span>";
     });
 
-    // ─── 3. BACKEND AUTH INTEGRATION ────────────────────────────────────
     authSubmit.addEventListener('click', async() => {
         const user = usernameInp.value.trim();
         const pass = passwordInp.value.trim();
@@ -103,12 +97,12 @@ document.addEventListener('DOMContentLoaded', async() => {
             const data = await response.json();
 
             if (response.ok) {
-                // Success: Store username and reload
+
                 chrome.storage.local.set({ username: user }, () => {
                     location.reload();
                 });
             } else {
-                // Show Backend Error (e.g., User exists, Wrong Pass)
+
                 authMsg.style.color = "#ff4d4d";
                 authMsg.textContent = data.detail || "Authentication Failed";
             }
@@ -118,13 +112,13 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     });
 
-    // ─── 4. CODE DETECTION LOGIC ────────────────────────────────────────
+
     async function getActiveTab() {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         return tab;
     }
 
-    // Update stats from Content Script
+
     async function fetchStats() {
         try {
             const tab = await getActiveTab();
@@ -145,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     }
 
-    // Force Rescan Page
+
     rescanBtn.addEventListener('click', async() => {
         rescanBtn.textContent = '⟳ Scanning...';
         rescanBtn.disabled = true;
@@ -168,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     });
 
-    // Toggle Badges Visibility
+
     visibilityToggle.addEventListener('change', async() => {
         const visible = visibilityToggle.checked;
         try {
@@ -180,6 +174,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     });
 
-    // Initialize stats when popup opens
+
     await fetchStats();
 });

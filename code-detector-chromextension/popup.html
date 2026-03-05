@@ -103,7 +103,6 @@
             font-weight: 400;
             margin-top: 1px;
         }
-        /* Status Card */
         
         .status-card {
             background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(74, 222, 128, 0.02));
@@ -176,7 +175,6 @@
             color: rgba(74, 222, 128, 0.6);
             font-family: 'Fira Code', monospace;
         }
-        /* Controls */
         
         .controls {
             display: flex;
@@ -230,7 +228,6 @@
             font-size: 13px;
             line-height: 1;
         }
-        /* Toggle Row */
         
         .toggle-row {
             display: flex;
@@ -294,7 +291,6 @@
             background: #4ade80;
             box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
         }
-        /* Footer */
         
         .footer {
             margin-top: 14px;
@@ -335,7 +331,7 @@
 <body>
     <div class="bg-grid"></div>
     <div class="container" id="mainView">
-        <!-- Header -->
+
         <div class="header">
             <div class="logo">
                 <div class="logo-dot"></div>
@@ -344,11 +340,11 @@
                 <h1>CSSS Detector</h1>
                 <p id="userStatus">v3.0.0 · active</p>
             </div>
-            <!-- New Login Trigger -->
+
             <button class="auth-trigger" id="openAuthBtn">👤</button>
         </div>
 
-        <!-- Status Card (Existing) -->
+
         <div class="status-card">
             <div class="stat-row">
                 <div>
@@ -365,7 +361,7 @@
             </div>
         </div>
 
-        <!-- Controls (Existing) -->
+
         <div class="controls">
             <button class="btn btn-primary" id="rescanBtn"><span class="btn-icon">⟳</span> Re-scan Page</button>
             <div class="toggle-row">
@@ -381,7 +377,7 @@
         </div>
     </div>
 
-    <!-- NEW: AUTH VIEW -->
+
     <div class="container" id="authView" style="display: none;">
         <div class="header">
             <button class="btn-back" id="closeAuthBtn">← Back</button>
@@ -400,7 +396,7 @@
         <p class="toggle-auth" id="toggleAuthMode">Don't have an account? <span>Register</span></p>
     </div>
 
-    <!-- Styles for Auth -->
+
     <style>
         .auth-trigger {
             background: none;

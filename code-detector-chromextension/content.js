@@ -1,6 +1,3 @@
-// Code Detector - Content Script v3
-// Clickable badge → rich tooltip with language info + code stats
-
 (function() {
     'use strict';
 
@@ -13,7 +10,6 @@
     const processedIds = new Set();
     let idCounter = 0;
 
-    // ── Language metadata: pattern + rich info ────────────────────────────────
     const LANGUAGES = [{
             name: 'JavaScript',
             pattern: /\b(function\s+\w+|const\s+\w+\s*=|let\s+\w+\s*=|var\s+\w+\s*=|=>\s*[\{\w]|async\s+function|await\s+\w+|require\s*\(|module\.exports|import\s+\w+\s+from)\b/,
@@ -27,7 +23,7 @@
         {
             name: 'TypeScript',
             pattern: /\b(interface\s+\w+\s*\{|type\s+\w+\s*=|enum\s+\w+\s*\{|readonly\s+\w+|namespace\s+\w+|declare\s+(const|let|var|function|class))\b/,
-            icon: '🔷',
+            icon: '⚡',
             color: '#3178c6',
             born: '2012',
             paradigm: 'Typed / OOP',
@@ -37,7 +33,7 @@
         {
             name: 'Python',
             pattern: /\b(def\s+\w+\s*\(|import\s+\w+|from\s+\w+\s+import|class\s+\w+[\s:(]|if\s+__name__\s*==|print\s*\(|elif\s+|lambda\s+[\w,]+:|self\.\w+)\b/,
-            icon: '🐍',
+            icon: '⚡',
             color: '#3776ab',
             born: '1991',
             paradigm: 'Multi-paradigm',
@@ -47,7 +43,7 @@
         {
             name: 'Java',
             pattern: /\b(public\s+(class|static|void|final)|private\s+\w+|protected\s+\w+|@Override|System\.out\.|new\s+\w+\s*\(|throws\s+\w+|extends\s+\w+)\b/,
-            icon: '☕',
+            icon: '⚡',
             color: '#ed8b00',
             born: '1995',
             paradigm: 'Object-Oriented',
@@ -57,7 +53,7 @@
         {
             name: 'C/C++',
             pattern: /\b(#include\s*[<"]|printf\s*\(|scanf\s*\(|int\s+main\s*\(|void\s+\w+\s*\(|malloc\s*\(|nullptr|std::|cout\s*<<|cin\s*>>)\b/,
-            icon: '⚙️',
+            icon: '⚡',
             color: '#00599c',
             born: '1972',
             paradigm: 'Procedural / OOP',
@@ -67,7 +63,7 @@
         {
             name: 'Rust',
             pattern: /\b(fn\s+\w+\s*[\(<]|let\s+mut\s+|use\s+\w+::|impl\s+\w+|struct\s+\w+\s*\{|enum\s+\w+\s*\{|match\s+\w+\s*\{|Some\(|None\b|Result<)\b/,
-            icon: '🦀',
+            icon: '⚡',
             color: '#ce422b',
             born: '2010',
             paradigm: 'Systems / Functional',
@@ -77,7 +73,7 @@
         {
             name: 'Go',
             pattern: /\b(func\s+\w+\s*\(|package\s+main|import\s*\(|fmt\.\w+\(|:=\s*|defer\s+\w+|go\s+func|make\s*\()\b/,
-            icon: '🐹',
+            icon: '⚡',
             color: '#00add8',
             born: '2009',
             paradigm: 'Concurrent / Imperative',
@@ -87,7 +83,7 @@
         {
             name: 'Ruby',
             pattern: /(\bdef\s+\w+|\bend\b|\bputs\s+|\brequire\s+['"]|\battr_(reader|writer|accessor)\b|\.each\s*(do|\{)|\bnil\b)/,
-            icon: '💎',
+            icon: '⚡',
             color: '#cc342d',
             born: '1995',
             paradigm: 'Object-Oriented',
@@ -97,7 +93,7 @@
         {
             name: 'PHP',
             pattern: /(<\?php|\$\w+\s*=|echo\s+["'\$]|\$this->|\$_GET|\$_POST|namespace\s+\w+|use\s+\w+\\\\)/,
-            icon: '🐘',
+            icon: '⚡',
             color: '#8892be',
             born: '1994',
             paradigm: 'Imperative / OOP',
@@ -107,7 +103,7 @@
         {
             name: 'Swift',
             pattern: /\b(func\s+\w+\s*\(|var\s+\w+\s*:|let\s+\w+\s*:|guard\s+let|if\s+let\s+|extension\s+\w+|protocol\s+\w+|@objc)\b/,
-            icon: '🍎',
+            icon: '⚡',
             color: '#f05138',
             born: '2014',
             paradigm: 'Multi-paradigm',
@@ -117,7 +113,7 @@
         {
             name: 'Kotlin',
             pattern: /\b(fun\s+\w+\s*\(|val\s+\w+\s*=|var\s+\w+\s*=|data\s+class|companion\s+object|when\s*\(|\.let\s*\{|\.apply\s*\{)\b/,
-            icon: '🟣',
+            icon: '⚡',
             color: '#7f52ff',
             born: '2011',
             paradigm: 'Multi-paradigm',
@@ -127,7 +123,7 @@
         {
             name: 'SQL',
             pattern: /\b(SELECT\s+[\w\*]+\s+FROM|INSERT\s+INTO\s+\w+|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+(TABLE|DATABASE|INDEX)|ALTER\s+TABLE|DROP\s+TABLE|INNER\s+JOIN|LEFT\s+JOIN)\b/i,
-            icon: '🗄️',
+            icon: '⚡',
             color: '#e38c00',
             born: '1974',
             paradigm: 'Declarative / Query',
@@ -137,7 +133,7 @@
         {
             name: 'Shell/Bash',
             pattern: /^(#!\/bin\/(bash|sh|zsh|fish)|sudo\s+\w+|apt(-get)?\s+(install|update)|npm\s+(install|run|start)|pip\s+install|git\s+(clone|commit|push)|docker\s+\w+)/m,
-            icon: '🖥️',
+            icon: '⚡',
             color: '#4eaa25',
             born: '1989',
             paradigm: 'Scripting / Command',
@@ -147,7 +143,7 @@
         {
             name: 'HTML',
             pattern: /(<(!DOCTYPE\s+html|html[\s>]|head[\s>]|body[\s>]|div[\s>]|script[\s>]|link\s|meta\s)[^>]*>|<\/\w+>)/i,
-            icon: '🌐',
+            icon: '⚡',
             color: '#e34f26',
             born: '1993',
             paradigm: 'Markup',
@@ -157,7 +153,7 @@
         {
             name: 'CSS',
             pattern: /([.#][\w-]+(\s*,\s*[.#][\w-]+)*\s*\{[\s\S]*?\}|@media\s+|@keyframes\s+\w+|:root\s*\{|--[\w-]+\s*:)/,
-            icon: '🎨',
+            icon: '⚡',
             color: '#264de4',
             born: '1996',
             paradigm: 'Stylesheet',
@@ -167,7 +163,7 @@
         {
             name: 'JSON',
             pattern: /^\s*(\{[\s\S]*"[\w\s-]+"[\s\S]*:|\[[\s\S]*\{)\s*[\}\]]/,
-            icon: '📦',
+            icon: '⚡',
             color: '#000000',
             born: '2001',
             paradigm: 'Data format',
@@ -177,7 +173,7 @@
         {
             name: 'YAML',
             pattern: /^([\w-]+:\s+.+\n[\w-]+:|---\n)/m,
-            icon: '📋',
+            icon: '⚡',
             color: '#cb171e',
             born: '2001',
             paradigm: 'Data format',
@@ -187,7 +183,7 @@
         {
             name: 'XML',
             pattern: /(<\?xml[\s\S]*\?>|<[a-zA-Z][\w:.-]*(\s[\s\S]*?)?>[\s\S]*<\/[a-zA-Z][\w:.-]*>)/,
-            icon: '📄',
+            icon: '⚡',
             color: '#ff6600',
             born: '1998',
             paradigm: 'Markup / Data format',
@@ -203,12 +199,11 @@
             if (lang.pattern.test(text)) return lang;
         }
         if (text.split('\n').length > 2 && /[{};()=><]/.test(text)) {
-            return { name: 'Code', icon: '📝', color: '#4ade80', born: '—', paradigm: '—', usedFor: 'General purpose', tip: 'Detected code pattern but language is ambiguous.' };
+            return { name: 'Code', icon: '⚡', color: '#4ade80', born: '—', paradigm: '—', usedFor: 'General purpose', tip: 'Detected code pattern but language is ambiguous.' };
         }
         return null;
     }
 
-    // ── Code stats ────────────────────────────────────────────────────────────
     function getCodeStats(code) {
         const lines = code.split('\n');
         const nonEmpty = lines.filter(l => l.trim().length > 0);
@@ -222,7 +217,6 @@
         };
     }
 
-    // ── Element helpers ───────────────────────────────────────────────────────
     function getBestTarget(el) {
         return el.closest('pre') || el;
     }
@@ -236,7 +230,6 @@
         return /language-|lang-|hljs|prism|shiki|highlight|codeblock|code-block|sourceCode|prettyprint|rouge|pygments/.test(combined);
     }
 
-    // ── Shadow DOM badge + tooltip ────────────────────────────────────────────
     function injectBadge(target, langMeta) {
         const pos = window.getComputedStyle(target).position;
         if (pos === 'static') target.style.setProperty('position', 'relative', 'important');
@@ -248,7 +241,7 @@
         const shadow = host.attachShadow({ mode: 'open' });
         const rawCode = target.innerText || target.textContent || '';
 
-        // 1. Set the HTML structure
+
         shadow.innerHTML = `
       <style>
         :host { all: initial; font-family: sans-serif; }
@@ -308,7 +301,7 @@
       </div>
     `;
 
-        // 2. Select elements (Safety Check)
+
         const badgeBtn = shadow.getElementById('badge_btn');
         const tooltip = shadow.getElementById('scan_tooltip');
         const scanBtn = shadow.getElementById('do_scan_btn');
@@ -316,9 +309,9 @@
         const btnLoader = shadow.getElementById('btn_loader');
         const btnTxt = shadow.getElementById('btn_txt');
 
-        if (!badgeBtn || !scanBtn || !resBox) return; // Stop if elements are missing
+        if (!badgeBtn || !scanBtn || !resBox) return;
 
-        // 3. Logic: Toggle Tooltip
+
         let is_open = false;
         badgeBtn.onclick = (e) => {
             e.stopPropagation();
@@ -326,11 +319,10 @@
             tooltip.classList.toggle('visible', is_open);
         };
 
-        // 4. Logic: API Call
+
         scanBtn.onclick = async(e) => {
             e.stopPropagation();
 
-            // Update UI to Loading State
             scanBtn.disabled = true;
             btnTxt.style.display = 'none';
             btnLoader.style.display = 'block';
@@ -347,7 +339,7 @@
                 });
 
                 const data = await response.json();
-                resBox.innerHTML = ""; // Clear loader text
+                resBox.innerHTML = "";
 
                 if (data.total_findings === 0) {
                     resBox.innerHTML = "✅ No vulnerabilities found.";
@@ -372,7 +364,6 @@
             }
         };
 
-        // Close on click outside
         document.addEventListener('click', () => {
             is_open = false;
             tooltip.classList.remove('visible');
@@ -381,7 +372,6 @@
         target.appendChild(host);
     }
 
-    // ── Process one element ───────────────────────────────────────────────────
     function processElement(el) {
         const target = getBestTarget(el);
         if (!target || target.hasAttribute(PROCESSED_ATTR)) return;
@@ -395,7 +385,6 @@
         injectBadge(target, langMeta);
     }
 
-    // ── Full page scan ────────────────────────────────────────────────────────
     function scanPage() {
         const selector = [
             'pre', 'code',
@@ -413,7 +402,6 @@
         return processedIds.size;
     }
 
-    // ── Boot ──────────────────────────────────────────────────────────────────
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', scanPage);
     } else {
@@ -430,7 +418,6 @@
     });
     obs.observe(document.body, { childList: true, subtree: true });
 
-    // ── Popup messages ────────────────────────────────────────────────────────
     chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         if (msg.action === 'getStats') sendResponse({ count: processedIds.size });
         if (msg.action === 'rescan') sendResponse({ count: scanPage() });
