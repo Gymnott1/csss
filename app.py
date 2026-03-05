@@ -127,9 +127,14 @@ def main():
     st.sidebar.info(f"Role: {st.session_state['role'].upper()}")
     st.sidebar.markdown("---")
     
-    menu = ["Vulnerability DB"]
+    menu = []
+    if st.session_state['role'] in ['super_admin', 'admin']:
+        menu.append("Vulnerability DB")
     if st.session_state['role'] == 'super_admin':
         menu.append("User Management")
+
+    if not menu:
+        st.info("Welcome to CSSS. Your account is active for extension scanning.")
     
     choice = st.sidebar.selectbox("Navigation", menu)
 
@@ -164,6 +169,18 @@ def manage_users():
     db.close()
 
 def manage_vulnerabilities():
+    if st.session_state['role'] == 'user':
+        st.markdown("""
+            <div style="background-color: #ff4d4d20; padding: 2rem; border-radius: 10px; border: 1px solid #ff4d4d; text-align: center;">
+                <h2 style="color: #ff4d4d;">🚫 Access Denied</h2>
+                <p style="color: #ccc;">You do not have the required permissions to access the Vulnerability Database.</p>
+                <p style="font-size: 0.8rem; color: #888;">Please contact your System Administrator to request elevated privileges.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        return 
+
+
+
     st.header("@ Custom Vulnerability Database")
     db = SessionLocal()
 
