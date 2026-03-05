@@ -1,0 +1,57 @@
+{
+  "name": "code-detector",
+  "displayName": "Code Detector",
+  "description": "Detects programming language — shows a CodeLens badge inside the editor, gutter highlight, status bar info, and a rich info panel.",
+  "version": "4.0.0",
+  "publisher": "code-detector",
+  "icon": "icons/icon128.png",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Programming Languages"],
+  "keywords": ["language", "detector", "badge", "codelens", "stats"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeDetector.showInfo",
+        "title": "Code Detector: Show Language Info",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "codeDetector.toggleDecorations",
+        "title": "Code Detector: Toggle Gutter Decorations"
+      },
+      {
+        "command": "codeDetector.copyStats",
+        "title": "Code Detector: Copy File Stats"
+      }
+    ],
+    "configuration": {
+      "title": "Code Detector",
+      "properties": {
+        "codeDetector.showInlineDecorations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show colored gutter decoration alongside code"
+        },
+        "codeDetector.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show language badge in the status bar"
+        },
+        "codeDetector.enableForUntitled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Detect language in unsaved (untitled) files"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "echo ready",
+    "package": "npx @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^2.22.0"
+  }
+}
