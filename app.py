@@ -15,7 +15,7 @@ if 'authenticated' not in st.session_state:
     st.session_state['username'] = None
 
 def login_page():
-    logo_path = "/home/gymnott/2025_2026/sem2/csss_backend/logo/icon128.png"
+    logo_path = "logo/icon128.png"
     img_base64 = get_base64_img(logo_path)
 
     st.markdown("""
@@ -110,7 +110,7 @@ def login_page():
 # --- MAIN DASHBOARD ---
 def main():
   
-    logo_path = "/home/gymnott/2025_2026/sem2/csss_backend/logo/icon128.png"
+    logo_path = "logo/icon128.png"
     img_base64 = get_base64_img(logo_path)
 
     st.sidebar.markdown(
