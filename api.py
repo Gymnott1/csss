@@ -103,9 +103,16 @@ def scan_snippet(request: dict):
                 "severity": rule.severity,
                 "line": 1,
                 "description": rule.description,
+                "remediation": rule.remediation if hasattr(rule, "remediation") else "Follow OWASP best practices.",
                 "tool": "CustomDB"
             })
     db.close()
+
+    for finding in all_findings:
+        try:
+            finding["ai_explanation"] = get_ai_explanation(finding)
+        except Exception as e:
+            finding["ai_explanation"] = f"AI explanation unavailable: {e}"
 
     return {
         "status": "success",

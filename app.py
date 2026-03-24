@@ -2,6 +2,7 @@ import streamlit as st
 import base64
 import bcrypt 
 from database import SessionLocal, User, CustomVulnerability, hash_password 
+from groq import Groq
 import pandas as pd
 st.set_page_config(page_title="CSSS Admin Dashboard", layout="wide")
 
@@ -131,6 +132,42 @@ def login_page():
         
         st.markdown("<p style='text-align: center; font-size: 0.7rem; color: #555; margin-top: 2rem;'>© 2025 Code Security Scan System | Secure AI-Assisted Development</p>", unsafe_allow_html=True)
 # --- MAIN DASHBOARD ---
+
+def get_ai_explanation(finding):
+    client = Groq()
+    prompt = (
+        f"Explain this security issue in a short way and provide a correct code snippet if possible:\n"
+        f"Title: {finding.get('title', '')}\n"
+        f"Description: {finding.get('description', '')}\n"
+        f"Remediation: {finding.get('remediation', '')}\n"
+        f"Severity: {finding.get('severity', '')}\n"
+    )
+    if 'line' in finding:
+        prompt += f"Line: {finding['line']}\n"
+    if 'tool' in finding:
+        prompt += f"Tool: {finding['tool']}\n"
+    return client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful assistant. "
+                    "Always provide a short, clear explanation and a correct code snippet. "
+                    "If the user asks for code, only return the code block and a one-sentence summary."
+                )
+            },
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="llama-3-70b-versatile",
+        temperature=0.5,
+        max_completion_tokens=512,
+        top_p=1,
+        stream=False,
+    ).choices[0].message.content
+
 def main():
   
     logo_path = "logo/icon128.png"
