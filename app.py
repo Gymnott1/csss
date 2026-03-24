@@ -24,10 +24,28 @@ def login_page():
             display: flex;
             justify-content: center;
         }
-        
-        
+        [data-testid="column"] > div:first-child {
+            background: #232428;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto 0 auto;
+            text-align: center;
+        }
 
-        /* Container for Logo + Title */
+        .login-card {
+            background: #232428;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto 0 auto;
+            text-align: center;
+        }
+
         .brand-header {
             display: flex;
             align-items: center;
@@ -43,7 +61,17 @@ def login_page():
             font-family: 'Inter', sans-serif;
             font-size: 2.5rem;
         }
-        
+
+        .stTextInput > div > input {
+            background: #292b2f;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
         .stButton > button {
             width: 100%;
             border-radius: 8px;
@@ -54,7 +82,7 @@ def login_page():
             border: none;
             transition: 0.3s;
         }
-        
+
         .stButton > button:hover {
             background-color: #0056b3;
             color: white;
@@ -73,8 +101,6 @@ def login_page():
     col1, col2, col3 = st.columns([1, 2, 1])
 
     with col2:
-        st.markdown('<div class="login-card">', unsafe_allow_html=True)
-        
         st.markdown(f"""
             <div class="brand-header">
                 <img src="data:image/png;base64,{img_base64}" width="50">
@@ -103,10 +129,7 @@ def login_page():
                 st.error("Access Denied: Invalid Credentials")
             db.close()
         
-        st.markdown('</div>', unsafe_allow_html=True)
-        
         st.markdown("<p style='text-align: center; font-size: 0.7rem; color: #555; margin-top: 2rem;'>© 2025 Code Security Scan System | Secure AI-Assisted Development</p>", unsafe_allow_html=True)
-
 # --- MAIN DASHBOARD ---
 def main():
   

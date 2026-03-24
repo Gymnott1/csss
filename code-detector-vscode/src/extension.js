@@ -119,7 +119,7 @@ async function performFullAudit(editor) {
 
         const apiRes = await getApiFindings(code, lang);
 
-        const findings = apiRes ? .findings || [];
+        const findings = apiRes?.findings || [];
         console.log(`>> 🛡️ Shield: Backend found ${findings.length} issues.`);
 
         /*
@@ -147,7 +147,7 @@ async function performFullAudit(editor) {
         editor.setDecorations(apiDecoType, apiDecos);
 
         if (currentPanel) {
-            updateWebviewContent(findings, apiRes ? .ai_analysis, doc.fileName);
+            updateWebviewContent(findings, apiRes?.ai_analysis, doc.fileName);
         }
     });
 }
